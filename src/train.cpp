@@ -3,17 +3,20 @@
 #include <iostream>
 
 Train::~Train() {
-    if (first) {
-        Cage *current = first->next;
-        while (current != first) { 
-            Cage *temp = current;
-            current = current->next;
-            delete temp;
+    Cage *current = first;
+    Cage *next;
+    while (current) {
+        next = current->next;
+        if (next == first) { 
+            delete current;
+            break;
         }
-        delete first; 
+        delete current;
+        current = next;
     }
+    first = nullptr; 
 }
-// добавления вагона
+// добавление вагона
 void Train::addCage(bool light) {
     Cage *newCage = new Cage();
     newCage->light = light;
@@ -40,6 +43,8 @@ int Train::getLength() {
         length++;
         countOp++;
     }
+    
+    current = first;
     for (int i = 0; i < length; ++i) {
         current->light = false;
         current = current->next;
