@@ -28,7 +28,6 @@ int Train::getLength() {
         length++;
         countOp++;
     }
-    
     current = first;
     for (int i = 0; i < length; ++i) {
         current->light = false;
