@@ -2,27 +2,12 @@
 #include "train.h"
 #include <iostream>
 
-Train::~Train() {
-    Cage *current = first;
-    Cage *next;
-    while (current) {
-        next = current->next;
-        if (next == first) { 
-            delete current;
-            break;
-        }
-        delete current;
-        current = next;
-    }
-    first = nullptr; 
-}
-// добавление вагона
 void Train::addCage(bool light) {
     Cage *newCage = new Cage();
     newCage->light = light;
     if (!first) {
         first = newCage;
-        first->next = first->prev = first; 
+        first->next = first->prev = first;
     } else {
         Cage *last = first->prev;
         last->next = newCage;
@@ -31,13 +16,13 @@ void Train::addCage(bool light) {
         first->prev = newCage;
     }
 }
-// получение длины поезда
+
 int Train::getLength() {
-    if (!first) return 0; 
-    first->light = true; 
+    if (!first) return 0;
+    first->light = true;
     int length = 1;
     Cage *current = first->next;
-    while (!current->light) { 
+    while (!current->light) {
         current->light = true;
         current = current->next;
         length++;
