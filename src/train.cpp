@@ -27,13 +27,13 @@ int Train::getLength() {
         current->light = true;
         current = current->next;
         length++;
-        countOp++;
     }
     current = first;
     for (int i = 0; i < length; ++i) {
         current->light = false;
         current = current->next;
     }
+    countOp = length;
     return length;
 }
 
