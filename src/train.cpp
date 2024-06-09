@@ -1,51 +1,55 @@
 // Copyright 2021 NNTU-CS
 #include "train.h"
 
-Train::Train() : first(nullptr), countOp(0) {}
+Train::Train() {
+    Cage{
+        false,
+        nullptr,
+        nullptr
+    };
+    countOp = 0;
+    first = nullptr;
+}
 
 void Train::addCage(bool lamp) {
-    Cage* newCage = new Cage();
-    newCage->light = lamp;
-    newCage->next = newCage->prev = nullptr;
-
     if (first) {
-        Cage* last = first->prev;
-        last->next = newCage;
-        newCage->prev = last;
-        newCage->next = first;
-        first->prev = newCage;
+        Cage* h = first;
+        while (first != h->next) {
+            h = h->next;
+        }
+        Cage* temp = new Cage;
+        temp->light = lamp;
+        temp->prev = temp->next = nullptr;
+        temp->prev = h;
+        h->next = temp;
+        temp->next = first;
+        first->prev = temp;
     } else {
-        first = newCage;
-        first->next = first->prev = first;
+        first = new Cage;
+        first->light = lamp;
+        first->prev = first;
+        first->next = first;
     }
-    countOp++;
 }
 
 int Train::getLength() {
-    if (!first) return 0;
-
-    Cage* current = first;
-    if (!current->light) {
-        current->light = true;
-        countOp++;
-    }
-
     int len = 0;
+    Cage* current = first;
+    current->light = true;
     while (true) {
         current = current->next;
+        countOp++;
         len++;
-        if (current->light) {
+        if (current->light == true) {
             current->light = false;
-            countOp++;
-            Cage* temp = current;
-            for (int i = 0; i < len; i++) {
-                temp = temp->prev;
+            int maxlen = len;
+            len = 0;
+            for (int i = 0; i < maxlen; i++) {
+                current = current->prev;
+                countOp++;
             }
-            if (!temp->light) {
-                return len;
-            }
-            current->light = true;
-            countOp++;
+            if (current->light == false)
+                return maxlen;
         }
     }
 }
